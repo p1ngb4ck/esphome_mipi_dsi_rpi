@@ -37,7 +37,7 @@ const uint8_t MADCTL_MV = 0x20;     // row/column swap
 const uint8_t MADCTL_XFLIP = 0x02;  // Mirror the display horizontally
 const uint8_t MADCTL_YFLIP = 0x01;  // Mirror the display vertically
 
-class MIPI_DSI_RPI : public display::Display : public i2c::I2CDevice {
+class MIPI_DSI_RPI : public display::Display {
  public:
   MIPI_DSI_RPI(size_t width, size_t height, display::ColorBitness color_depth, uint8_t pixel_mode)
       : width_(width), height_(height), color_depth_(color_depth), pixel_mode_(pixel_mode) {}
@@ -63,6 +63,9 @@ class MIPI_DSI_RPI : public display::Display : public i2c::I2CDevice {
   void set_lanes(uint8_t lanes) { this->lanes_ = lanes; }
   void set_madctl(uint8_t madctl) { this->madctl_ = madctl; }
   esp_lcd_panel_io_handle_t get_io_handle() { return this->io_handle_; }
+  void set_i2c_address(uint8_t address) { address_ = address; }
+  uint8_t get_i2c_address() const { return this->address_; }
+  void set_i2c_bus(I2CBus *bus) { bus_ = bus; }
 
   void smark_failed(const char *message, esp_err_t err) {
     auto str = str_sprintf("Setup failed: %s: %s", message, esp_err_to_name(err));
@@ -101,7 +104,7 @@ class MIPI_DSI_RPI : public display::Display : public i2c::I2CDevice {
   const char *model_{"Unknown"};
   std::vector<uint8_t> init_sequence_{};
   uint16_t pclk_frequency_ = 16;  // in MHz
-  uint16_t lane_bit_rate_{1500};  // in Mbps
+  uint16_t lane_bit_rate_{1000};  // in Mbps
   uint8_t lanes_{2};              // 1, 2, 3 or 4 lanes
 
   bool invert_colors_{};
@@ -118,6 +121,9 @@ class MIPI_DSI_RPI : public display::Display : public i2c::I2CDevice {
   uint16_t y_low_{1};
   uint16_t x_high_{0};
   uint16_t y_high_{0};
+
+  uint8_t i2c_address_{0x45};  ///< store the address of the device on the bus
+  I2CBus *i2c_bus_{nullptr};  
 };
 
 }  // namespace mipi_dsi_rpi
