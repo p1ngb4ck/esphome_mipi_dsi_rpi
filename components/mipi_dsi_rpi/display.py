@@ -173,16 +173,6 @@ def model_schema(config):
     )
 
 
-def _i2c_schema(config):
-    schema = cv.Schema(
-        {
-            cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI_I2C),
-        }
-    )
-    .extend(i2c.i2c_device_schema(0x45))
-    return schema
-
-
 def _config_schema(config):
     config = cv.Schema(
         {
@@ -204,10 +194,17 @@ def _final_validate(config):
     return config
 
 
-I2C_SCHEMA = _i2c_schema
 CONFIG_SCHEMA = _config_schema
 FINAL_VALIDATE_SCHEMA = _final_validate
-
+I2C_CONFIG_SCHEMA = (
+    cv.Schema(
+        {
+            cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI_I2C),
+        }
+    )
+    .extend(cv.COMPONENT_SCHEMA)
+    .extend(i2c.i2c_device_schema(0x45))
+)
 
 async def to_code(config):
     model = MODELS[config[CONF_MODEL].upper()]
