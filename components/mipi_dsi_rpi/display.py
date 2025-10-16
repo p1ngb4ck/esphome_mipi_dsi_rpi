@@ -5,6 +5,7 @@ import pkgutil
 from esphome import pins
 import esphome.codegen as cg
 from esphome.components import display
+from esphome.components import i2c
 from esphome.components.const import (
     BYTE_ORDER_BIG,
     BYTE_ORDER_LITTLE,
@@ -58,17 +59,19 @@ from esphome.final_validate import full_config
 from . import mipi_dsi_rpi_ns, models
 
 # Currently only ESP32-P4 is supported, so esp_ldo and psram are required
-DEPENDENCIES = ["esp32", "esp_ldo", "psram"]
+DEPENDENCIES = ["esp32", "esp_ldo", "i2c", "psram"]
 DOMAIN = "mipi_dsi_rpi"
 
 LOGGER = logging.getLogger(DOMAIN)
 
 MIPI_DSI_RPI = mipi_dsi_rpi_ns.class_("MIPI_DSI_RPI", display.Display, cg.Component)
+MIPI_DSI_RPI_I2C = mipi_dsi_rpi_ns.class_("MIPI_DSI_RPI_I2C", cg.Component, i2c.I2CDevice)
 ColorOrder = display.display_ns.enum("ColorMode")
 ColorBitness = display.display_ns.enum("ColorBitness")
 
 CONF_LANE_BIT_RATE = "lane_bit_rate"
 CONF_LANES = "lanes"
+DISPLAY_CONF_ID = "rpi_display_i2c"
 
 DriverChip("CUSTOM")
 
@@ -170,6 +173,17 @@ def model_schema(config):
     )
 
 
+def _i2c_schema = (
+    cv.Schema(
+        {
+            cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI_I2C),
+        }
+    )
+    .extend(cv.COMPONENT_SCHEMA)
+    .extend(i2c.i2c_device_schema(0x2C))
+)
+
+
 def _config_schema(config):
     config = cv.Schema(
         {
@@ -190,7 +204,7 @@ def _final_validate(config):
         config[CONF_SHOW_TEST_CARD] = True
     return config
 
-
+I2C_SCHEMA = _i2c_schema
 CONFIG_SCHEMA = _config_schema
 FINAL_VALIDATE_SCHEMA = _final_validate
 
@@ -226,6 +240,8 @@ async def to_code(config):
     if model.rotation_as_transform(config):
         config[CONF_ROTATION] = 0
     await display.register_display(var, config)
+    i2c_conf = cg.new_Pvariable(config[DISPLAY_CONF_ID])
+    await i2c.register_i2c_device(i2c_conf, config)
     if lamb := config.get(CONF_LAMBDA):
         lambda_ = await cg.process_lambda(
             lamb, [(display.DisplayRef, "it")], return_type=cg.void
