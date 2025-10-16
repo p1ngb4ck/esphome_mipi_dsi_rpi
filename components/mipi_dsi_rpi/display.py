@@ -59,7 +59,7 @@ from . import mipi_dsi_rpi, models
 
 # Currently only ESP32-P4 is supported, so esp_ldo and psram are required
 DEPENDENCIES = ["esp32", "esp_ldo", "psram"]
-DOMAIN = "mipi_dsi"
+DOMAIN = "mipi_dsi_rpi"
 
 LOGGER = logging.getLogger(DOMAIN)
 
