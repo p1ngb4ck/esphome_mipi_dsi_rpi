@@ -55,7 +55,7 @@ from esphome.const import (
 )
 from esphome.final_validate import full_config
 
-from . import mipi_dsi_ns, models
+from . import mipi_dsi_rpi, models
 
 # Currently only ESP32-P4 is supported, so esp_ldo and psram are required
 DEPENDENCIES = ["esp32", "esp_ldo", "psram"]
@@ -63,7 +63,7 @@ DOMAIN = "mipi_dsi"
 
 LOGGER = logging.getLogger(DOMAIN)
 
-MIPI_DSI = mipi_dsi_ns.class_("MIPI_DSI", display.Display, cg.Component)
+MIPI_DSI_RPI = mipi_dsi_rpi.class_("MIPI_DSI_RPI", display.Display, cg.Component)
 ColorOrder = display.display_ns.enum("ColorMode")
 ColorBitness = display.display_ns.enum("ColorBitness")
 
@@ -123,7 +123,7 @@ def model_schema(config):
     schema = display.FULL_DISPLAY_SCHEMA.extend(
         {
             model.option(CONF_RESET_PIN, cv.UNDEFINED): pins.gpio_output_pin_schema,
-            cv.GenerateID(): cv.declare_id(MIPI_DSI),
+            cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI),
             cv_dimensions(CONF_DIMENSIONS): dimension_schema(
                 model.get_default(CONF_DRAW_ROUNDING, 1)
             ),
