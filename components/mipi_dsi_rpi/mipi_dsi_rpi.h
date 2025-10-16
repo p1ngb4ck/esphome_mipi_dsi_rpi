@@ -61,6 +61,7 @@ class MIPI_DSI_RPI : public display::Display {
   void set_lane_bit_rate(uint16_t lane_bit_rate) { this->lane_bit_rate_ = lane_bit_rate; }
   void set_lanes(uint8_t lanes) { this->lanes_ = lanes; }
   void set_madctl(uint8_t madctl) { this->madctl_ = madctl; }
+  esp_lcd_panel_io_handle_t get_io_handle() { return this->io_handle_; }
 
   void smark_failed(const char *message, esp_err_t err) {
     auto str = str_sprintf("Setup failed: %s: %s", message, esp_err_to_name(err));
