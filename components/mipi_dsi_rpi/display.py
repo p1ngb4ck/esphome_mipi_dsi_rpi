@@ -64,8 +64,7 @@ DOMAIN = "mipi_dsi_rpi"
 
 LOGGER = logging.getLogger(DOMAIN)
 
-MIPI_DSI_RPI = mipi_dsi_rpi_ns.class_("MIPI_DSI_RPI", display.Display, cg.Component)
-MIPI_DSI_RPI_I2C = mipi_dsi_rpi_ns.class_("MIPI_DSI_RPI_I2C", cg.Component, i2c.I2CDevice)
+MIPI_DSI_RPI = mipi_dsi_rpi_ns.class_("MIPI_DSI_RPI", display.Display, cg.Component, i2c.I2CDevice)
 ColorOrder = display.display_ns.enum("ColorMode")
 ColorBitness = display.display_ns.enum("ColorBitness")
 
@@ -127,7 +126,6 @@ def model_schema(config):
         {
             model.option(CONF_RESET_PIN, cv.UNDEFINED): pins.gpio_output_pin_schema,
             cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI),
-            cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI_I2C),
             cv_dimensions(CONF_DIMENSIONS): dimension_schema(
                 model.get_default(CONF_DRAW_ROUNDING, 1)
             ),
