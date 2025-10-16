@@ -1,9 +1,9 @@
 #ifdef USE_ESP32_VARIANT_ESP32P4
 #include <utility>
-#include "mipi_dsi.h"
+#include "mipi_dsi_rpi.h"
 
 namespace esphome {
-namespace mipi_dsi {
+namespace mipi_dsi_rpi {
 
 static bool notify_refresh_ready(esp_lcd_panel_handle_t panel, esp_lcd_dpi_panel_event_data_t *edata, void *user_ctx) {
   auto *sem = static_cast<SemaphoreHandle_t *>(user_ctx);
@@ -11,7 +11,7 @@ static bool notify_refresh_ready(esp_lcd_panel_handle_t panel, esp_lcd_dpi_panel
   xSemaphoreGiveFromISR(sem, &need_yield);
   return (need_yield == pdTRUE);
 }
-void MIPI_DSI::setup() {
+void MIPI_DSI_RPI::setup() {
   ESP_LOGCONFIG(TAG, "Running Setup");
 
   if (!this->enable_pins_.empty()) {
@@ -141,7 +141,7 @@ void MIPI_DSI::setup() {
   ESP_LOGCONFIG(TAG, "MIPI DSI setup complete");
 }
 
-void MIPI_DSI::update() {
+void MIPI_DSI_RPI::update() {
   if (this->auto_clear_enabled_) {
     this->clear();
   }
@@ -168,7 +168,7 @@ void MIPI_DSI::update() {
   this->y_high_ = 0;
 }
 
-void MIPI_DSI::draw_pixels_at(int x_start, int y_start, int w, int h, const uint8_t *ptr, display::ColorOrder order,
+void MIPI_DSI_RPI::draw_pixels_at(int x_start, int y_start, int w, int h, const uint8_t *ptr, display::ColorOrder order,
                               display::ColorBitness bitness, bool big_endian, int x_offset, int y_offset, int x_pad) {
   if (w <= 0 || h <= 0)
     return;
@@ -181,7 +181,7 @@ void MIPI_DSI::draw_pixels_at(int x_start, int y_start, int w, int h, const uint
   this->write_to_display_(x_start, y_start, w, h, ptr, x_offset, y_offset, x_pad);
 }
 
-void MIPI_DSI::write_to_display_(int x_start, int y_start, int w, int h, const uint8_t *ptr, int x_offset, int y_offset,
+void MIPI_DSI_RPI::write_to_display_(int x_start, int y_start, int w, int h, const uint8_t *ptr, int x_offset, int y_offset,
                                  int x_pad) {
   esp_err_t err = ESP_OK;
   auto bytes_per_pixel = 3 - this->color_depth_;
@@ -206,7 +206,7 @@ void MIPI_DSI::write_to_display_(int x_start, int y_start, int w, int h, const u
     ESP_LOGE(TAG, "lcd_lcd_panel_draw_bitmap failed: %s", esp_err_to_name(err));
 }
 
-bool MIPI_DSI::check_buffer_() {
+bool MIPI_DSI_RPI::check_buffer_() {
   if (this->is_failed())
     return false;
   if (this->buffer_ != nullptr)
@@ -222,7 +222,7 @@ bool MIPI_DSI::check_buffer_() {
   return true;
 }
 
-void MIPI_DSI::draw_pixel_at(int x, int y, Color color) {
+void MIPI_DSI_RPI::draw_pixel_at(int x, int y, Color color) {
   if (!this->get_clipping().inside(x, y))
     return;
 
@@ -284,7 +284,7 @@ void MIPI_DSI::draw_pixel_at(int x, int y, Color color) {
   if (y > this->y_high_)
     this->y_high_ = y;
 }
-void MIPI_DSI::fill(Color color) {
+void MIPI_DSI_RPI::fill(Color color) {
   if (!this->check_buffer_())
     return;
   switch (this->color_depth_) {
@@ -317,7 +317,7 @@ void MIPI_DSI::fill(Color color) {
   }
 }
 
-int MIPI_DSI::get_width() {
+int MIPI_DSI_RPI::get_width() {
   switch (this->rotation_) {
     case display::DISPLAY_ROTATION_90_DEGREES:
     case display::DISPLAY_ROTATION_270_DEGREES:
@@ -329,7 +329,7 @@ int MIPI_DSI::get_width() {
   }
 }
 
-int MIPI_DSI::get_height() {
+int MIPI_DSI_RPI::get_height() {
   switch (this->rotation_) {
     case display::DISPLAY_ROTATION_0_DEGREES:
     case display::DISPLAY_ROTATION_180_DEGREES:
@@ -343,9 +343,9 @@ int MIPI_DSI::get_height() {
 
 static const uint8_t PIXEL_MODES[] = {0, 16, 18, 24};
 
-void MIPI_DSI::dump_config() {
+void MIPI_DSI_RPI::dump_config() {
   ESP_LOGCONFIG(TAG,
-                "MIPI_DSI RGB LCD"
+                "MIPI_DSI_RPI RGB LCD"
                 "\n  Model: %s"
                 "\n  Width: %u"
                 "\n  Height: %u"
@@ -374,6 +374,6 @@ void MIPI_DSI::dump_config() {
                 YESNO(this->invert_colors_), this->pclk_frequency_);
   LOG_PIN("  Reset Pin ", this->reset_pin_);
 }
-}  // namespace mipi_dsi
+}  // namespace mipi_dsi_rpi
 }  // namespace esphome
 #endif  // USE_ESP32_VARIANT_ESP32P4
