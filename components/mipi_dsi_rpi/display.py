@@ -127,6 +127,7 @@ def model_schema(config):
         {
             model.option(CONF_RESET_PIN, cv.UNDEFINED): pins.gpio_output_pin_schema,
             cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI),
+            cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI_I2C),
             cv_dimensions(CONF_DIMENSIONS): dimension_schema(
                 model.get_default(CONF_DRAW_ROUNDING, 1)
             ),
@@ -168,20 +169,10 @@ def model_schema(config):
         }
     )
     return cv.All(
-        schema,
+        schema.extend(i2c.i2c_device_schema(0x45)),
         only_on_variant(supported=[const.VARIANT_ESP32P4]),
         cv.only_with_esp_idf,
     )
-
-
-def i2c_schema(config):
-    i2c_schema =  cv.Schema(
-        {
-            cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI_I2C),
-        },
-    )
-    i2c_schema.extend(i2c.i2c_device_schema(0x45))
-    return i2c_schema(config)
 
 
 def _config_schema(config):
@@ -191,7 +182,6 @@ def _config_schema(config):
         },
         extra=cv.ALLOW_EXTRA,
     )(config)
-    config = i2c_schema(config)
     return model_schema(config)(config)
 
 
