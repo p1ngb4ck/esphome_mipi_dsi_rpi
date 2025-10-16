@@ -63,7 +63,7 @@ DOMAIN = "mipi_dsi_rpi"
 
 LOGGER = logging.getLogger(DOMAIN)
 
-MIPI_DSI_RPI = mipi_dsi_rpi.class_("MIPI_DSI_RPI", display.Display, cg.Component)
+MIPI_DSI_RPI = mipi_dsi_rpi_ns.class_("MIPI_DSI_RPI", display.Display, cg.Component)
 ColorOrder = display.display_ns.enum("ColorMode")
 ColorBitness = display.display_ns.enum("ColorBitness")
 
