@@ -135,6 +135,7 @@ void MIPI_DSI_RPI::setup() {
   delay(100);
 
   // set brightness max
+  buffer[0] = 0x86;
   buffer[1] = 0xFF;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   
