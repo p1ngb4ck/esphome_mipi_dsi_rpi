@@ -93,7 +93,7 @@ void MIPI_DSI_RPI::setup() {
   }
 
   // i2c init for rpi displays with attiny85
-  SmallBufferWithHeapFallback<2> buffer_alloc;  // Most I2C writes are small
+  esphome::i2c::SmallBufferWithHeapFallback<2> buffer_alloc;  // Most I2C writes are small
   uint8_t *buffer = buffer_alloc.get(total_len);
   buffer[0] = 0x86;
   buffer[1] = 0x00;
