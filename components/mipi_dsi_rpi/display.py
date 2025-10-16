@@ -55,7 +55,7 @@ from esphome.const import (
 )
 from esphome.final_validate import full_config
 
-from . import mipi_dsi_rpi, models
+from . import mipi_dsi_rpi_ns, models
 
 # Currently only ESP32-P4 is supported, so esp_ldo and psram are required
 DEPENDENCIES = ["esp32", "esp_ldo", "psram"]
