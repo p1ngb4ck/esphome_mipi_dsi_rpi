@@ -14,6 +14,15 @@ static bool notify_refresh_ready(esp_lcd_panel_handle_t panel, esp_lcd_dpi_panel
 void MIPI_DSI_RPI::setup() {
   ESP_LOGCONFIG(TAG, "Running Setup");
 
+  auto dsi_write = [io_handle](uint16_t reg, uint32_t val) {
+    uint8_t msg[6] = {
+      (uint8_t)(reg & 0xFF), (uint8_t)(reg >> 8),
+      (uint8_t)(val & 0xFF), (uint8_t)((val >> 8) & 0xFF),
+      (uint8_t)((val >> 16) & 0xFF), (uint8_t)((val >> 24) & 0xFF)
+    };
+    esp_lcd_panel_io_tx_param(this->io_handle_, 0x29, msg, 6);
+  };
+  
   if (!this->enable_pins_.empty()) {
     for (auto *pin : this->enable_pins_) {
       pin->setup();
@@ -82,8 +91,44 @@ void MIPI_DSI_RPI::setup() {
   } else {
     esp_lcd_panel_io_tx_param(this->io_handle_, SW_RESET_CMD, nullptr, 0);
   }
+
+  // i2c init for rpi displays with attiny85
+  this->i2c_bus_->.writev(this->i2c_address_, 0x86, 0x00);
+  delay(25);
+  this->i2c_bus_->.writev(this->i2c_address_, 0x85, 0x00);
+  delay(100);
+  this->i2c_bus_->.writev(this->i2c_address_, 0x85, 0x01);
+  delay(25);
+  // Activate ports
+  this->i2c_bus_->.writev(this->i2c_address_, 0x81,0x04);
+  delay(25);
+  this->i2c_bus_->.writev(this->i2c_address_, 0x82,0x80);
+  delay(25);
+  this->i2c_bus_->.writev(this->i2c_address_, 0x85,0x01);
+  delay(80);
+  this->i2c_bus_->.writev(this->i2c_address_, 0x86,0x00);
+  delay(25);
+
+  // Configure bridge via DSI
+  dsi_write(0x0210, 0x00000003);  // DSI_LANEENABLE
+  dsi_write(0x0164, 0x00000005);  // PPI_D0S_CLRSIPOCOUNT
+  dsi_write(0x0168, 0x00000005);  // PPI_D1S_CLRSIPOCOUNT
+  dsi_write(0x0144, 0x00000000);  // PPI_D0S_ATMR
+  dsi_write(0x0148, 0x00000000);  // PPI_D1S_ATMR
+  dsi_write(0x0114, 0x00000003);  // PPI_LPTXTIMECNT
+  dsi_write(0x0450, 0x00000000);  // SPICMR
+  dsi_write(0x0420, 0x00100150);  // LCDCTRL
+  dsi_write(0x0464, 0x0000040f);  // SYSCTRL
+  delay(100);
+  dsi_write(0x0104, 0x00000001);  // PPI_STARTPPI
+  dsi_write(0x0204, 0x00000001);  // DSI_STARTDSI
+  delay(100);
+
+  // set brightness max
+  this->i2c_bus_->.writev(this->i2c_address_, 0x86,0xFF);
+  
   // need to know when the display is ready for SLPOUT command - will be 120ms after reset
-  auto when = millis() + 120;
+  auto when = millis() + 120;  
   err = esp_lcd_panel_init(this->handle_);
   if (err != ESP_OK) {
     this->smark_failed("esp_lcd_init failed", err);
