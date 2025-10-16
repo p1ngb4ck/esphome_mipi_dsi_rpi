@@ -227,8 +227,7 @@ async def to_code(config):
     if model.rotation_as_transform(config):
         config[CONF_ROTATION] = 0
     await display.register_display(var, config)
-    i2c_id = cg.new_Pvariable(config[CONF_DISPLAY_I2C_ID])
-    await i2c.register_i2c_device(i2c_id, config)
+    await i2c.register_i2c_device(config[CONF_DISPLAY_I2C_ID], config)
     if lamb := config.get(CONF_LAMBDA):
         lambda_ = await cg.process_lambda(
             lamb, [(display.DisplayRef, "it")], return_type=cg.void
