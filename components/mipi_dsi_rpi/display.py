@@ -180,6 +180,7 @@ def _config_schema(config):
         },
         extra=cv.ALLOW_EXTRA,
     )(config)
+    .extend(i2c.i2c_device_schema(0x45))
     return model_schema(config)(config)
 
 
@@ -196,15 +197,6 @@ def _final_validate(config):
 
 CONFIG_SCHEMA = _config_schema
 FINAL_VALIDATE_SCHEMA = _final_validate
-I2C_CONFIG_SCHEMA = (
-    cv.Schema(
-        {
-            cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI_I2C),
-        }
-    )
-    .extend(cv.COMPONENT_SCHEMA)
-    .extend(i2c.i2c_device_schema(0x45))
-)
 
 async def to_code(config):
     model = MODELS[config[CONF_MODEL].upper()]
