@@ -126,9 +126,10 @@ void MIPI_DSI_RPI::setup() {
   buffer[1] = 0xFF;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
 
-  buffer[0] = 0x81;
+/*  buffer[0] = 0x81;
   buffer[1] = 0x02;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+*/
   delay(80);
   
   // need to know when the display is ready for SLPOUT command - will be 120ms after reset
