@@ -165,8 +165,8 @@ def model_schema(config):
             model.option(CONF_VSYNC_BACK_PORCH): cv.int_,
             model.option(CONF_VSYNC_FRONT_PORCH): cv.int_,
         }
-        .extend(i2c.i2c_device_schema(0x45))
     )
+    .extend(i2c.i2c_device_schema(0x45))
     return cv.All(
         schema,
         only_on_variant(supported=[const.VARIANT_ESP32P4]),
