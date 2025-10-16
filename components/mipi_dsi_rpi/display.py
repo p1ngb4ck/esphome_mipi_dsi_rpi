@@ -182,8 +182,6 @@ def _i2c_schema:
     .extend(cv.COMPONENT_SCHEMA)
     .extend(i2c.i2c_device_schema(0x45))
     return schema
-)
-
 
 def _config_schema(config):
     config = cv.Schema(
