@@ -14,7 +14,7 @@ static bool notify_refresh_ready(esp_lcd_panel_handle_t panel, esp_lcd_dpi_panel
 void MIPI_DSI_RPI::setup() {
   ESP_LOGCONFIG(TAG, "Running Setup");
 
-  auto dsi_write = [io_handle](uint16_t reg, uint32_t val) {
+  auto dsi_write = [=, this](uint16_t reg, uint32_t val) {
     uint8_t msg[6] = {
       (uint8_t)(reg & 0xFF), (uint8_t)(reg >> 8),
       (uint8_t)(val & 0xFF), (uint8_t)((val >> 8) & 0xFF),
@@ -93,20 +93,20 @@ void MIPI_DSI_RPI::setup() {
   }
 
   // i2c init for rpi displays with attiny85
-  this->i2c_bus_->.writev(this->i2c_address_, 0x86, 0x00);
+  this->i2c_bus_->writev(this->i2c_address_, 0x86, 0x00);
   delay(25);
-  this->i2c_bus_->.writev(this->i2c_address_, 0x85, 0x00);
+  this->i2c_bus_->writev(this->i2c_address_, 0x85, 0x00);
   delay(100);
-  this->i2c_bus_->.writev(this->i2c_address_, 0x85, 0x01);
+  this->i2c_bus_->writev(this->i2c_address_, 0x85, 0x01);
   delay(25);
   // Activate ports
-  this->i2c_bus_->.writev(this->i2c_address_, 0x81,0x04);
+  this->i2c_bus_->writev(this->i2c_address_, 0x81,0x04);
   delay(25);
-  this->i2c_bus_->.writev(this->i2c_address_, 0x82,0x80);
+  this->i2c_bus_->writev(this->i2c_address_, 0x82,0x80);
   delay(25);
-  this->i2c_bus_->.writev(this->i2c_address_, 0x85,0x01);
+  this->i2c_bus_->writev(this->i2c_address_, 0x85,0x01);
   delay(80);
-  this->i2c_bus_->.writev(this->i2c_address_, 0x86,0x00);
+  this->i2c_bus_->writev(this->i2c_address_, 0x86,0x00);
   delay(25);
 
   // Configure bridge via DSI
