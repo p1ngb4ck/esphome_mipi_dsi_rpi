@@ -63,8 +63,8 @@ class MIPI_DSI_RPI : public display::Display {
   void set_lanes(uint8_t lanes) { this->lanes_ = lanes; }
   void set_madctl(uint8_t madctl) { this->madctl_ = madctl; }
   esp_lcd_panel_io_handle_t get_io_handle() { return this->io_handle_; }
-  void set_i2c_address(uint8_t address) { this->address_ = address; }
-  uint8_t get_i2c_address() const { return this->address_; }
+  void set_i2c_address(uint8_t address) { this->i2c_address_ = address; }
+  uint8_t get_i2c_address() const { return this->i2c_address_; }
   void set_i2c_bus(esphome::i2c::I2CBus *bus) { this->i2c_bus_ = bus; }
 
   void smark_failed(const char *message, esp_err_t err) {
