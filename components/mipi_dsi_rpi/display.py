@@ -173,7 +173,7 @@ def model_schema(config):
     )
 
 
-def _i2c_schema:
+def _i2c_schema(config):
     schema = cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI_I2C),
