@@ -177,7 +177,7 @@ def _config_schema(config):
     config = cv.Schema(
         {
             cv.Required(CONF_MODEL): cv.one_of(*MODELS, upper=True),
-            cv.Optional(CONF_DISPLAY_I2C_ID, default="display_i2c"),
+            cv.Optional(CONF_DISPLAY_I2C_ID, default="display_i2c"): cv.string,
         },
         extra=cv.ALLOW_EXTRA,
     )(config)
