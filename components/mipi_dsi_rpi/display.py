@@ -71,7 +71,7 @@ ColorBitness = display.display_ns.enum("ColorBitness")
 
 CONF_LANE_BIT_RATE = "lane_bit_rate"
 CONF_LANES = "lanes"
-DISPLAY_CONF_ID = "rpi_display_i2c"
+CONF_DISPLAY_I2C_ID = "display_i2c_id"
 
 DriverChip("CUSTOM")
 
@@ -165,6 +165,7 @@ def model_schema(config):
             model.option(CONF_VSYNC_BACK_PORCH): cv.int_,
             model.option(CONF_VSYNC_FRONT_PORCH): cv.int_,
         }
+        .extend(i2c.i2c_device_schema(0x45))
     )
     return cv.All(
         schema,
@@ -172,11 +173,11 @@ def model_schema(config):
         cv.only_with_esp_idf,
     )
 
-
 def _config_schema(config):
     config = cv.Schema(
         {
             cv.Required(CONF_MODEL): cv.one_of(*MODELS, upper=True),
+            cv.Optional(CONF_DISPLAY_I2C_ID, default="display_i2c"),
         },
         extra=cv.ALLOW_EXTRA,
     )(config)
@@ -203,7 +204,6 @@ async def to_code(config):
     pixel_mode = int(config[CONF_PIXEL_MODE].removesuffix("bit"))
     width, height, _offset_width, _offset_height = model.get_dimensions(config)
     var = cg.new_Pvariable(config[CONF_ID], width, height, color_depth, pixel_mode)
-
     sequence, madctl = model.get_sequence(config)
     cg.add(var.set_model(config[CONF_MODEL]))
     cg.add(var.set_init_sequence(sequence))
@@ -228,6 +228,8 @@ async def to_code(config):
     if model.rotation_as_transform(config):
         config[CONF_ROTATION] = 0
     await display.register_display(var, config)
+    i2c_id = cg.new_Pvariable(config[CONF_DISPLAY_I2C_ID])
+    await i2c.register_i2c_device(i2c_id, config)
     if lamb := config.get(CONF_LAMBDA):
         lambda_ = await cg.process_lambda(
             lamb, [(display.DisplayRef, "it")], return_type=cg.void
