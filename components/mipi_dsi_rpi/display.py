@@ -202,6 +202,7 @@ def _final_validate(config):
         config[CONF_SHOW_TEST_CARD] = True
     return config
 
+
 I2C_SCHEMA = _i2c_schema
 CONFIG_SCHEMA = _config_schema
 FINAL_VALIDATE_SCHEMA = _final_validate
