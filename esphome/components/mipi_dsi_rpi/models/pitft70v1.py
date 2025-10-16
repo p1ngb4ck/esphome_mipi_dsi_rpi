@@ -3,11 +3,12 @@ import esphome.config_validation as cv
 
 # fmt: off
 DriverChip(
-    "PITFT70",
+    "PITFT70v1",
     width=800,
     height=480,
-    lanes=1,
+    lanes=2,
     color_depth=16,
+    pixel_format=,
     byte_order="little_endian",
     hsync_back_porch=48,
     hsync_pulse_width=48,
