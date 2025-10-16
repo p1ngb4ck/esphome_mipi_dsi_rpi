@@ -19,7 +19,7 @@
 namespace esphome {
 namespace mipi_dsi_rpi {
 
-constexpr static const char *const TAG = "display.mipi_dsi";
+constexpr static const char *const TAG = "display.mipi_dsi_rpi";
 const uint8_t SW_RESET_CMD = 0x01;
 const uint8_t SLEEP_OUT = 0x11;
 const uint8_t SDIR_CMD = 0xC7;
