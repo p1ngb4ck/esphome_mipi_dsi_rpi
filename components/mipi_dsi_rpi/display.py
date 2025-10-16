@@ -180,7 +180,6 @@ def _config_schema(config):
         },
         extra=cv.ALLOW_EXTRA,
     )(config)
-    .extend(i2c.i2c_device_schema(0x45))
     return model_schema(config)(config)
 
 
