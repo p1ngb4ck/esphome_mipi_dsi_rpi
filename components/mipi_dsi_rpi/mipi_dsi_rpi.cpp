@@ -93,20 +93,33 @@ void MIPI_DSI_RPI::setup() {
   }
 
   // i2c init for rpi displays with attiny85
-  this->i2c_bus_->writev(this->i2c_address_, 0x86, 0x00);
+  const esphome::i2c::WriteBuffer *buffer;
+  buffer[0] = 0x86;
+  buffer[1] = 0x00;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(25);
-  this->i2c_bus_->writev(this->i2c_address_, 0x85, 0x00);
+  buffer[0] = 0x85;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(100);
-  this->i2c_bus_->writev(this->i2c_address_, 0x85, 0x01);
+  buffer[1] = 0x01;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(25);
   // Activate ports
-  this->i2c_bus_->writev(this->i2c_address_, 0x81,0x04);
+  buffer[0] = 0x81;
+  buffer[1] = 0x04;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(25);
-  this->i2c_bus_->writev(this->i2c_address_, 0x82,0x80);
+  buffer[0] = 0x82;
+  buffer[1] = 0x80;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(25);
-  this->i2c_bus_->writev(this->i2c_address_, 0x85,0x01);
+  buffer[0] = 0x85;
+  buffer[1] = 0x01;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(80);
-  this->i2c_bus_->writev(this->i2c_address_, 0x86,0x00);
+  buffer[0] = 0x86;
+  buffer[1] = 0x00;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(25);
 
   // Configure bridge via DSI
@@ -125,7 +138,8 @@ void MIPI_DSI_RPI::setup() {
   delay(100);
 
   // set brightness max
-  this->i2c_bus_->.writev(this->i2c_address_, 0x86,0xFF);
+  buffer[1] = 0xFF;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   
   // need to know when the display is ready for SLPOUT command - will be 120ms after reset
   auto when = millis() + 120;  
