@@ -168,10 +168,21 @@ def model_schema(config):
         }
     )
     return cv.All(
-        schema.extend(i2c.i2c_device_schema(0x45)),
+        schema,
         only_on_variant(supported=[const.VARIANT_ESP32P4]),
         cv.only_with_esp_idf,
     )
+
+
+def i2c_schema(config):
+    i2c_schema =  cv.Schema(
+        {
+            cv.GenerateID(): cv.declare_id(MIPI_DSI_RPI_I2C),
+        },
+    )
+    i2c_schema.extend(i2c.i2c_device_schema(0x45))
+    return i2c_schema(config)
+
 
 def _config_schema(config):
     config = cv.Schema(
@@ -180,6 +191,7 @@ def _config_schema(config):
         },
         extra=cv.ALLOW_EXTRA,
     )(config)
+    config = i2c_schema(config)
     return model_schema(config)(config)
 
 
