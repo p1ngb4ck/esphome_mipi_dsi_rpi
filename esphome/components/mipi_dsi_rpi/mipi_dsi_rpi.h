@@ -38,7 +38,7 @@ const uint8_t MADCTL_YFLIP = 0x01;  // Mirror the display vertically
 
 class MIPI_DSI_RPI : public display::Display {
  public:
-  MIPI_DSI(size_t width, size_t height, display::ColorBitness color_depth, uint8_t pixel_mode)
+  MIPI_DSI_RPI(size_t width, size_t height, display::ColorBitness color_depth, uint8_t pixel_mode)
       : width_(width), height_(height), color_depth_(color_depth), pixel_mode_(pixel_mode) {}
   display::ColorOrder get_color_mode() { return this->color_mode_; }
   void set_color_mode(display::ColorOrder color_mode) { this->color_mode_ = color_mode; }
