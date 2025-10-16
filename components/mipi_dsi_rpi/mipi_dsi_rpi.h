@@ -63,9 +63,9 @@ class MIPI_DSI_RPI : public display::Display {
   void set_lanes(uint8_t lanes) { this->lanes_ = lanes; }
   void set_madctl(uint8_t madctl) { this->madctl_ = madctl; }
   esp_lcd_panel_io_handle_t get_io_handle() { return this->io_handle_; }
-  void set_i2c_address(uint8_t address) { address_ = address; }
+  void set_i2c_address(uint8_t address) { this->address_ = address; }
   uint8_t get_i2c_address() const { return this->address_; }
-  void set_i2c_bus(I2CBus *bus) { bus_ = bus; }
+  void set_i2c_bus(esphome::i2c::I2CBus *bus) { this->i2c_bus_ = bus; }
 
   void smark_failed(const char *message, esp_err_t err) {
     auto str = str_sprintf("Setup failed: %s: %s", message, esp_err_to_name(err));
@@ -123,7 +123,7 @@ class MIPI_DSI_RPI : public display::Display {
   uint16_t y_high_{0};
 
   uint8_t i2c_address_{0x45};  ///< store the address of the device on the bus
-  I2CBus *i2c_bus_{nullptr};  
+  esphome::i2c::I2CBus *i2c_bus_{nullptr};  
 };
 
 }  // namespace mipi_dsi_rpi
