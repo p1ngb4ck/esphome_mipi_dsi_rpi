@@ -70,7 +70,6 @@ ColorBitness = display.display_ns.enum("ColorBitness")
 
 CONF_LANE_BIT_RATE = "lane_bit_rate"
 CONF_LANES = "lanes"
-CONF_DISPLAY_I2C_ID = "display_i2c_id"
 
 DriverChip("CUSTOM")
 
@@ -227,7 +226,7 @@ async def to_code(config):
     if model.rotation_as_transform(config):
         config[CONF_ROTATION] = 0
     await display.register_display(var, config)
-    await i2c.register_i2c_device(config[CONF_DISPLAY_I2C_ID], config)
+    await i2c.register_i2c_device(var, config)
     if lamb := config.get(CONF_LAMBDA):
         lambda_ = await cg.process_lambda(
             lamb, [(display.DisplayRef, "it")], return_type=cg.void
