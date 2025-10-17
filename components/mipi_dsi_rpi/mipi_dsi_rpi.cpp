@@ -44,7 +44,7 @@ void MIPI_DSI_RPI::setup() {
     return;
   }
   esp_lcd_dbi_io_config_t dbi_config = {
-      .virtual_channel = 0,
+      .virtual_channel = 1,
       .lcd_cmd_bits = 8,    // according to the LCD spec
       .lcd_param_bits = 8,  // according to the LCD spec
   };
