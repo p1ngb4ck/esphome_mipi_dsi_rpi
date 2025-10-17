@@ -102,9 +102,6 @@ void MIPI_DSI_RPI::setup() {
   buffer[0] = 0x85;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(200);
-  buffer[1] = 0x01;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(25);
   
   // Configure bridge via DSI
   dsi_write(0x0210, 0x00000001);  // DSI_LANEENABLE
@@ -120,6 +117,10 @@ void MIPI_DSI_RPI::setup() {
   dsi_write(0x0104, 0x00000001);  // PPI_STARTPPI
   dsi_write(0x0204, 0x00000001);  // DSI_STARTDSI
   delay(100);
+  
+  buffer[1] = 0x01;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(25);
 
   // set brightness max
   buffer[0] = 0x86;
