@@ -107,7 +107,7 @@ void MIPI_DSI_RPI::setup() {
   delay(25);
   
   // Configure bridge via DSI
-  dsi_write(0x0210, 0x00000003);  // DSI_LANEENABLE
+  dsi_write(0x0210, 0x00000007);  // DSI_LANEENABLE
   dsi_write(0x0164, 0x00000005);  // PPI_D0S_CLRSIPOCOUNT
   dsi_write(0x0168, 0x00000005);  // PPI_D1S_CLRSIPOCOUNT
   dsi_write(0x0144, 0x00000000);  // PPI_D0S_ATMR
@@ -126,10 +126,9 @@ void MIPI_DSI_RPI::setup() {
   buffer[1] = 0xFF;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
 
-/*  buffer[0] = 0x81;
+  buffer[0] = 0x81;
   buffer[1] = 0x02;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-*/
   delay(80);
   
   // need to know when the display is ready for SLPOUT command - will be 120ms after reset
