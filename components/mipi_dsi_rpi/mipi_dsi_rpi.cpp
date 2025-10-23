@@ -110,6 +110,15 @@ void MIPI_DSI_RPI::setup() {
   buffer[1] = 0x00;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(50);
+
+  buffer[0] = 0x81;
+  buffer[1] = 0x04;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(30);
+  buffer[0] = 0x82;
+  buffer[1] = 0x80;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(30);
   
   // Configure bridge via DSI
   dsi_write(0x0210, 0x00000003);  // DSI_LANEENABLE
@@ -125,15 +134,6 @@ void MIPI_DSI_RPI::setup() {
   dsi_write(0x0104, 0x00000001);  // PPI_STARTPPI
   dsi_write(0x0204, 0x00000001);  // DSI_STARTDSI
   delay(100);
-
-  buffer[0] = 0x81;
-  buffer[1] = 0x04;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(30);
-  buffer[0] = 0x82;
-  buffer[1] = 0x80;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(30);
   
   buffer[0] = 0x83;
   buffer[1] = 0x0F;
