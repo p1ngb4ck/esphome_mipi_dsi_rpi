@@ -145,27 +145,6 @@ void MIPI_DSI_RPI::setup() {
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(30);
 
-  buffer[0] = 0x81;
-  buffer[1] = 0x02;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(80);
-
-  buffer[0] = 0x8D;
-  buffer[1] = 0x04;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(25);
-  buffer[0] = 0x8C;
-  buffer[1] = 0x7C;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(25);
-  buffer[0] = 0x90;
-  buffer[1] = 0x00;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(25);
-  buffer[0] = 0x91;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(25);
-  
   // need to know when the display is ready for SLPOUT command - will be 120ms after reset
   auto when = millis() + 120;  
   err = esp_lcd_panel_init(this->handle_);
