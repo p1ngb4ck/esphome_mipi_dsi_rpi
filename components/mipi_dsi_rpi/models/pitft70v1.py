@@ -17,7 +17,7 @@ DriverChip(
     vsync_pulse_width=2,
     vsync_front_porch=7,
     pclk_frequency="25.9794MHz",
-    lane_bit_rate="800Mbps",
+    lane_bit_rate="500Mbps",
     swap_xy=cv.UNDEFINED,
     color_order="RGB",
     initsequence=[],
