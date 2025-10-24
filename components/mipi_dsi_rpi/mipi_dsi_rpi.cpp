@@ -120,7 +120,7 @@ void MIPI_DSI_RPI::setup() {
   delay(30);
   
   // Configure bridge via DSI
-  dsi_write(0x0210, 0x00000000);  // DSI_LANEENABLE
+  dsi_write(0x0210, 0x00000003);  // DSI_LANEENABLE
   dsi_write(0x0164, 0x00000005);  // PPI_D0S_CLRSIPOCOUNT
   dsi_write(0x0168, 0x00000005);  // PPI_D1S_CLRSIPOCOUNT
   dsi_write(0x0144, 0x00000000);  // PPI_D0S_ATMR
