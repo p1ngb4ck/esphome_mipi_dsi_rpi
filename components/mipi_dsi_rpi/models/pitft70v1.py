@@ -6,7 +6,7 @@ DriverChip(
     "PITFT70v1",
     width=480,
     height=800,
-    lanes=1,
+    lanes=2,
     color_depth=16,
     pixel_format="MIPI_DSI_FMT_RGB565",
     byte_order="little_endian",
