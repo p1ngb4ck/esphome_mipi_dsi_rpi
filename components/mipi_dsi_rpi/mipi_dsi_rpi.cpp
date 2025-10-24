@@ -120,19 +120,19 @@ void MIPI_DSI_RPI::setup() {
   delay(30);
 
   // Configure bridge via DSI
-  #dsi_write(0x0210, 0x00000001);  // DSI_LANEENABLE
-  #dsi_write(0x0164, 0x00000005);  // PPI_D0S_CLRSIPOCOUNT
-  #dsi_write(0x0168, 0x00000005);  // PPI_D1S_CLRSIPOCOUNT
-  #dsi_write(0x0144, 0x00000000);  // PPI_D0S_ATMR
-  #dsi_write(0x0148, 0x00000000);  // PPI_D1S_ATMR
-  #dsi_write(0x0114, 0x00000003);  // PPI_LPTXTIMECNT
-  #dsi_write(0x0450, 0x00000000);  // SPICMR
-  #dsi_write(0x0420, 0x00100150);  // LCDCTRL
-  #dsi_write(0x0464, 0x0000040f);  // SYSCTRL
-  #delay(100);
-  #dsi_write(0x0104, 0x00000001);  // PPI_STARTPPI
-  #dsi_write(0x0204, 0x00000001);  // DSI_STARTDSI
-  #delay(100);
+  //dsi_write(0x0210, 0x00000001);  // DSI_LANEENABLE
+  //dsi_write(0x0164, 0x00000005);  // PPI_D0S_CLRSIPOCOUNT
+  //dsi_write(0x0168, 0x00000005);  // PPI_D1S_CLRSIPOCOUNT
+  //dsi_write(0x0144, 0x00000000);  // PPI_D0S_ATMR
+  //dsi_write(0x0148, 0x00000000);  // PPI_D1S_ATMR
+  //dsi_write(0x0114, 0x00000003);  // PPI_LPTXTIMECNT
+  //dsi_write(0x0450, 0x00000000);  // SPICMR
+  //dsi_write(0x0420, 0x00100150);  // LCDCTRL
+  //dsi_write(0x0464, 0x0000040f);  // SYSCTRL
+  //delay(100);
+  //dsi_write(0x0104, 0x00000001);  // PPI_STARTPPI
+  //dsi_write(0x0204, 0x00000001);  // DSI_STARTDSI
+  //delay(100);
 
   buffer[0] = 0x8D;
   buffer[1] = 0x04;
