@@ -126,7 +126,7 @@ void MIPI_DSI_RPI::setup() {
 //  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
 //  delay(50);
   buffer[0] = 0x81;
-  buffer[1] = 0x07;
+  buffer[1] = 0x04;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(30);
 /*
