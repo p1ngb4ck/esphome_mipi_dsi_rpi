@@ -95,11 +95,11 @@ void MIPI_DSI_RPI::setup() {
   // i2c init for rpi displays with attiny85
   esphome::i2c::SmallBufferWithHeapFallback<2> buffer_alloc;  // Most I2C writes are small
   uint8_t *buffer = buffer_alloc.get(2);
-  buffer[0] = 0x86;
+  buffer[0] = 0x85;
   buffer[1] = 0x00;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(25);
-  buffer[0] = 0x85;
+  buffer[0] = 0x86;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(150);
   buffer[0] = 0x85;
@@ -118,7 +118,26 @@ void MIPI_DSI_RPI::setup() {
   buffer[1] = 0x80;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(30);
-  
+
+  buffer[0] = 0x8D;
+  buffer[1] = 0x04;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(10);
+  buffer[0] = 0x8C;
+  buffer[1] = 0x04;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(10);
+
+  buffer[0] = 0x90;
+  buffer[1] = 0x00;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(10);
+
+  buffer[0] = 0x91;
+  buffer[1] = 0x00;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(100);
+
   // Configure bridge via DSI
   dsi_write(0x0210, 0x00000003);  // DSI_LANEENABLE
   dsi_write(0x0164, 0x00000005);  // PPI_D0S_CLRSIPOCOUNT
