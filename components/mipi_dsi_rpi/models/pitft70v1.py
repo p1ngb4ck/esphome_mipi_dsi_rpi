@@ -11,7 +11,7 @@ DriverChip(
     pixel_format="MIPI_DSI_FMT_RGB565",
     byte_order="little_endian",
     hsync_back_porch=46,
-    hsync_pulse_width=1,
+    hsync_pulse_width=2,
     hsync_front_porch=1,
     vsync_back_porch=21,
     vsync_pulse_width=2,
