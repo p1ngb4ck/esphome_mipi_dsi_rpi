@@ -4,9 +4,9 @@ import esphome.config_validation as cv
 # fmt: off
 DriverChip(
     "PITFT70v1",
-    width=480,
-    height=800,
-    lanes=2,
+    width=800,
+    height=480,
+    lanes=1,
     color_depth=16,
     pixel_format="MIPI_DSI_FMT_RGB565",
     byte_order="little_endian",
