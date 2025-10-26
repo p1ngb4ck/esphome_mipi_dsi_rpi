@@ -75,6 +75,7 @@ void MIPI_DSI_RPI::setup() {
                                                },
                                            .flags = {
                                                .use_dma2d = true,
+                                               .disable_lp = true,
                                            }};
   err = esp_lcd_new_panel_dpi(this->bus_handle_, &dpi_config, &this->handle_);
   if (err != ESP_OK) {
