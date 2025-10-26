@@ -113,7 +113,19 @@ void MIPI_DSI_RPI::setup() {
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(2);
 
-  /*
+  buffer[0] = 0x81;
+  buffer[1] = 0x04;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(30);
+  buffer[0] = 0x82;
+  buffer[1] = 0x80;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(30);
+  buffer[0] = 0x83;
+  buffer[1] = 0x01;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(25);
+
   buffer[0] = 0x8D;
   buffer[1] = 0x04;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
@@ -127,16 +139,8 @@ void MIPI_DSI_RPI::setup() {
   buffer[1] = 0x00;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(100);
-  */
-  buffer[0] = 0x81;
-  buffer[1] = 0x02;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(30);
-  buffer[0] = 0x82;
-  buffer[1] = 0x80;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   
-  // Configure bridge via DSI
+    // Configure bridge via DSI
   dsi_write(0x0210, 0x03);  // DSI_LANEENABLE
   dsi_write(0x0164, 0x05);  // PPI_D0S_CLRSIPOCOUNT
   dsi_write(0x0168, 0x05);  // PPI_D1S_CLRSIPOCOUNT
@@ -149,13 +153,7 @@ void MIPI_DSI_RPI::setup() {
   delay(100);
   dsi_write(0x0104, 0x01);  // PPI_STARTPPI
   dsi_write(0x0204, 0x01);  // DSI_STARTDSI
-  delay(100);
-
-  delay(30);
-  buffer[0] = 0x83;
-  buffer[1] = 0x01;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(25);
+  delay(100);  
   
   // set brightness max
   buffer[0] = 0x86;
