@@ -74,7 +74,7 @@ void MIPI_DSI_RPI::setup() {
                                                    .vsync_front_porch = this->vsync_front_porch_,
                                                },
                                            .flags = {
-                                               .use_dma2d = false,
+                                               .use_dma2d = true,
                                            }};
   err = esp_lcd_new_panel_dpi(this->bus_handle_, &dpi_config, &this->handle_);
   if (err != ESP_OK) {
