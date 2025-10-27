@@ -188,7 +188,7 @@ void MIPI_DSI_RPI::setup() {
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(50);
   // Configure bridge via DSI
-  dsi_write(0x0210, 0x03);  // DSI_LANEENABLE
+  dsi_write(0x0210, 0x05);  // DSI_LANEENABLE
   dsi_write(0x0164, 0x05);  // PPI_D0S_CLRSIPOCOUNT
   dsi_write(0x0168, 0x05);  // PPI_D1S_CLRSIPOCOUNT
   dsi_write(0x0144, 0x00);  // PPI_D0S_ATMR
