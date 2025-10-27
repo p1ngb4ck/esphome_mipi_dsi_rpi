@@ -100,7 +100,22 @@ void MIPI_DSI_RPI::setup() {
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   buffer[0] = 0x85;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(100);  
+  delay(100);
+  buffer[0] = 0x83;
+  buffer[1] = 0x00;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(10);
+  buffer[0] = 0x81;
+  buffer[1] = 0x04;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  buffer[0] = 0x82;
+  buffer[1] = 0x80;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(30);
+  buffer[0] = 0x83;
+  buffer[1] = 0x01;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(25);
   buffer[0] = 0x85;
   buffer[1] = 0x01;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
@@ -166,17 +181,7 @@ void MIPI_DSI_RPI::setup() {
         delay(10);
     }
   }
-  buffer[0] = 0x83;
-  buffer[1] = 0x00;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(10);
-  buffer[0] = 0x81;
-  buffer[1] = 0x04;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  buffer[0] = 0x82;
-  buffer[1] = 0x80;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(30);
+  
 
   /*
   buffer[0] = 0x8D;
@@ -192,11 +197,6 @@ void MIPI_DSI_RPI::setup() {
   buffer[1] = 0x00;  
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   */
-  
-  buffer[0] = 0x83;
-  buffer[1] = 0x01;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(25);
   
   // set brightness max
   buffer[0] = 0x86;
