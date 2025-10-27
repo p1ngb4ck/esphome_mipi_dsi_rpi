@@ -95,22 +95,17 @@ void MIPI_DSI_RPI::setup() {
   // i2c init for rpi displays with attiny85
   esphome::i2c::SmallBufferWithHeapFallback<2> buffer_alloc;  // Most I2C writes are small
   uint8_t *buffer = buffer_alloc.get(2);
-  buffer[0] = 0x85;
+  buffer[0] = 0x86;
   buffer[1] = 0x00;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  buffer[0] = 0x86;
+  buffer[0] = 0x85;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(100);
-  
-  buffer[0] = 0x85;
-  buffer[1] = 0x01;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(20);
 
   buffer[0] = 0x83;
   buffer[1] = 0x00;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(2);
+  delay(80);
 
   buffer[0] = 0x81;
   buffer[1] = 0x04;
@@ -120,6 +115,22 @@ void MIPI_DSI_RPI::setup() {
   buffer[1] = 0x80;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   delay(30);
+  
+    // Configure bridge via DSI
+  dsi_write(0x0210, 0x03);  // DSI_LANEENABLE
+  dsi_write(0x0164, 0x05);  // PPI_D0S_CLRSIPOCOUNT
+  dsi_write(0x0168, 0x05);  // PPI_D1S_CLRSIPOCOUNT
+  dsi_write(0x0144, 0x00);  // PPI_D0S_ATMR
+  dsi_write(0x0148, 0x00);  // PPI_D1S_ATMR
+  dsi_write(0x0114, 0x03);  // PPI_LPTXTIMECNT
+  dsi_write(0x0450, 0x00);  // SPICMR
+  dsi_write(0x0420, 0x00100150);  // LCDCTRL
+  dsi_write(0x0464, 0x040f);  // SYSCTRL
+  delay(100);
+  dsi_write(0x0104, 0x01);  // PPI_STARTPPI
+  dsi_write(0x0204, 0x01);  // DSI_STARTDSI
+  delay(100);
+  
   buffer[0] = 0x83;
   buffer[1] = 0x01;
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
@@ -136,23 +147,12 @@ void MIPI_DSI_RPI::setup() {
   this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
   buffer[0] = 0x91;
   buffer[1] = 0x00;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(100);
   
-    // Configure bridge via DSI
-  dsi_write(0x0210, 0x03);  // DSI_LANEENABLE
-  dsi_write(0x0164, 0x05);  // PPI_D0S_CLRSIPOCOUNT
-  dsi_write(0x0168, 0x05);  // PPI_D1S_CLRSIPOCOUNT
-  dsi_write(0x0144, 0x00);  // PPI_D0S_ATMR
-  dsi_write(0x0148, 0x00);  // PPI_D1S_ATMR
-  dsi_write(0x0114, 0x03);  // PPI_LPTXTIMECNT
-  dsi_write(0x0450, 0x00);  // SPICMR
-  dsi_write(0x0420, 0x00100150);  // LCDCTRL
-  dsi_write(0x0464, 0x040f);  // SYSCTRL
-  delay(100);
-  dsi_write(0x0104, 0x01);  // PPI_STARTPPI
-  dsi_write(0x0204, 0x01);  // DSI_STARTDSI
-  delay(100);  
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  buffer[0] = 0x85;
+  buffer[1] = 0x01;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(20);
   
   // set brightness max
   buffer[0] = 0x86;
