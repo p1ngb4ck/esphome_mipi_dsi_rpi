@@ -130,34 +130,6 @@ void MIPI_DSI_RPI::setup() {
   dsi_write(0x0104, 0x01);  // PPI_STARTPPI
   dsi_write(0x0204, 0x01);  // DSI_STARTDSI
   delay(100);
-  
-  buffer[0] = 0x83;
-  buffer[1] = 0x01;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(25);
-
-  buffer[0] = 0x8D;
-  buffer[1] = 0x04;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  buffer[0] = 0x8C;
-  buffer[1] = 0x04;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  buffer[0] = 0x90;
-  buffer[1] = 0x00;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  buffer[0] = 0x91;
-  buffer[1] = 0x00;
-  
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  buffer[0] = 0x85;
-  buffer[1] = 0x01;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
-  delay(20);
-  
-  // set brightness max
-  buffer[0] = 0x86;
-  buffer[1] = 0xFF;
-  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
 
   // need to know when the display is ready for SLPOUT command - will be 120ms after reset
   auto when = millis() + 120;  
@@ -204,6 +176,35 @@ void MIPI_DSI_RPI::setup() {
         delay(10);
     }
   }
+
+  buffer[0] = 0x83;
+  buffer[1] = 0x01;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(25);
+
+  buffer[0] = 0x8D;
+  buffer[1] = 0x04;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  buffer[0] = 0x8C;
+  buffer[1] = 0x04;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  buffer[0] = 0x90;
+  buffer[1] = 0x00;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  buffer[0] = 0x91;
+  buffer[1] = 0x00;
+  
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  buffer[0] = 0x85;
+  buffer[1] = 0x01;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  delay(20);
+  
+  // set brightness max
+  buffer[0] = 0x86;
+  buffer[1] = 0xFF;
+  this->i2c_bus_->write_readv(this->i2c_address_, buffer, 2, nullptr, 0);
+  
   this->io_lock_ = xSemaphoreCreateBinary();
   esp_lcd_dpi_panel_event_callbacks_t cbs = {
       .on_color_trans_done = notify_refresh_ready,
